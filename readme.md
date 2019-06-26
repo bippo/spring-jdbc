@@ -38,7 +38,53 @@ CREATE TABLE employee
   PRIMARY KEY (employeeid)
 );
 ```
-## 2. Konfigurasi Spring
+## 2. Konfigurasi file pom.xml
+File pom.xml kita berisi library yang dibutuhkan untuk project ini, yaitu: spring-boot-starter-jdbc dan driver postgresql.
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>bippo-training</groupId>
+    <artifactId>boot-jdbc</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4-1200-jdbc41</version>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+## 3. Konfigurasi Spring
 Konfigurasi diperlukan untuk memberikan informasi kepada Spring tentang lokasi database.
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/training
@@ -46,7 +92,7 @@ spring.datasource.username=training
 spring.datasource.password=training
 ```
 
-## 3. Akses ke Database
+## 4. Akses ke Database
 Untuk akses ke database, kita akan menggunakan kelas yang khusus, kelas ini akan kita namakan `EmployeeDAOImp` (implement interface `EmployeeDAO`). DAO (Data Access Object), sesuai namanya berarti objek yang digunakan untuk mengakses data. Untuk berkomunikasi dengan PostgreSQL, kita akan menggunakan library yang disediakan Spring yaitu `NamedParameterJdbcTemplate`. Kelas ini akan kita deklarasikan sebagai private variable dan kita tambahkan anotasi `@Autowired`.  Spring akan secara otomatis membuat object dari kelas ini dan melakukan konfigurasi agar kelas tersebut mengakses database sesuai dengan konfigurasi yang ada di `application.properties`.
 
 Berikut contoh method untuk memasukkan data ke database:
@@ -85,7 +131,7 @@ public Employee mapRow(ResultSet rs, int arg1) throws SQLException {
 }
 ```
 
-## 3. Aplikasi Utama
+## 5. Aplikasi Utama
 Melalui aplikasi utama, kita menguji apakah kelas DAO kita sudah berfungsi sebagaimana mestinya. Kelas utama sebagai berikut:
 ```java
 @Autowired
